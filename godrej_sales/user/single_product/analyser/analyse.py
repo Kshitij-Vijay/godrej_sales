@@ -97,9 +97,6 @@ def analyse_all():
 
 import os
 
-# You should already have this in your imports:
-# from analyser.text_summary import summarize_text
-
 SUMMARIES_FOLDER = "summaries"
 
 def summarize_all_pdfs():
