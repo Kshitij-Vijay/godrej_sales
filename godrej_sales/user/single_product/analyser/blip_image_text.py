@@ -65,9 +65,7 @@ def blip_image_text(img_path, questions):
     answer = response.generations[0][0].text
     print("\nAnswer:\n" + answer + "\n")
 
-    out = { "qna" : combined_text, "summary" : answer}
-
-    return out
+    return answer
 
 # print(blip_image_text("Screenshot 2025-09-13 110320.jpg",questions))
 

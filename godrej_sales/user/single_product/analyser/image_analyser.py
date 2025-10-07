@@ -17,12 +17,13 @@ def analyse_images(questions):
         if os.path.isfile(img_path) and img_file.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp', '.tiff')):
             print(f"Processing image: {img_file}")
             out = blip_image_text(img_path, questions)  # returns dictionary with 'qna' and 'summary'
-            results.append([img_file, out['qna'], out['summary']])
+            print(out)
+            results.append([img_file, out])
 
     # Write results to CSV
     with open(output_csv, mode='w', encoding='utf-8', newline='') as f:
         writer = csv.writer(f)
-        writer.writerow(['name', 'qna', 'summary'])  # Header
+        writer.writerow(['name', 'summary'])  # Header
         writer.writerows(results)
 
     print(f"Analysis complete. CSV saved to {output_csv}")
