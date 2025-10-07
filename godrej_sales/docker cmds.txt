@@ -1,0 +1,15 @@
+docker-compose exec ollama sh
+go inside a running container
+
+ollama ps
+models in ollama
+
+docker-compose run --rm -it app
+to run interactive app
+
+docker-compose exec ollama ollama pull nomic-embed-text:latest
+docker-compose exec ollama ollama pull llama:latest
+docker-compose exec ollama ollama pull smollm2:latest
+to install models in ollama
+
+

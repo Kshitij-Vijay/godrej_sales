@@ -1,0 +1,14 @@
+pdfminer.six
+pdf2image
+Pillow
+camelot-py[cv]
+tk
+pytesseract 
+pillow
+scikit-learn
+pyspellchecker
+beautifulsoup4 
+requests
+playwright
+transformers
+torch

@@ -1,0 +1,7 @@
+{
+    "name": "beds",
+    "type": "group",
+    "children": [
+        "lean"
+    ]
+}
