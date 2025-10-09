@@ -194,18 +194,23 @@ class item:
         self.add_name(name)
 
     def simple_process(self,name):
-        print("simple process")
-        self.make_json()
-        self.add_type("item")
-        self.add_name(name)
-        self.create_item()
-        self.set_json('c',True)
-        print("analysing Items ... ")
-        self.analyse_item()
-        self.set_json('a',True)
-        t = input("Do you want to ask questions ? (y/n) \n")
-        if(t == 'y'):
-            self.chat()
+        print("simple Process")  # in the method
+        created = self.check_json('c')
+        if created == True:
+            print("The item has been created aldready, what do you want to do ? \n")
+            option = input(" \n1. Add data or Verify \n2. Analyse again\n3. QNA\n")
+            if option == '1':
+                self.create_item()
+                c = input("Do you want to verify (y/n)??")
+                if c == 'y':
+                    from verify import verify_main
+                    verify_main()
+            elif option == '2':
+                self.re_analyse()
+            elif option == '3':
+                self.chat()
+        else:
+            self.first_cry()  
 
     def usage(self):
         print("usage")  # in the method
