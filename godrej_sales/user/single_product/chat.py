@@ -3,6 +3,8 @@ from langchain_ollama import OllamaLLM,OllamaEmbeddings
 from langchain_community.vectorstores import FAISS
 import pickle
 from analyser.ollama_clients import choose_model
+from langchain.chains import ConversationalRetrievalChain
+from langchain.memory import ConversationBufferMemory
 
 def llm_chain(llm_model: str = None, embedding_model: str = "nomic-embed-text"):
     if llm_model is None:
@@ -17,10 +19,17 @@ def llm_chain(llm_model: str = None, embedding_model: str = "nomic-embed-text"):
     # Initialize the LLM
     llm = OllamaLLM(model=llm_model)
 
-    # Create retrieval QA chain that integrates vectorstore retrieval + LLM generation
-    qa_chain = RetrievalQA.from_chain_type(llm=llm, retriever=vectorstore.as_retriever())
+    # Setup conversation memory buffer
+    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
-    return qa_chain
+    # Create conversational retrieval chain that integrates memory, retrieval, and LLM
+    chatbot = ConversationalRetrievalChain.from_llm(
+        llm=llm,
+        retriever=vectorstore.as_retriever(),
+        memory=memory,
+        return_source_documents=False
+    )
+    return chatbot
 
 
 def chatbot():
@@ -36,4 +45,4 @@ def chatbot():
 
 
 # Example usage:
-chatbot()
+# chatbot()

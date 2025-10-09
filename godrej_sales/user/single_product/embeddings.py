@@ -74,7 +74,7 @@ def load_embeddings_locally(file_path='summaries/embeddings.pkl'):
 def store_embeds():
     save_text_embeddings(combine_texts(),None)
 
-store_embeds()
+# store_embeds()
 
 
 

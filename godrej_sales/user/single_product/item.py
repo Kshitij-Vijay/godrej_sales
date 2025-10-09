@@ -1,5 +1,6 @@
 from create import create
-from analyser.analyse import analyse_all
+from analyser.analyse import analyseee
+from embeddings import store_embeds
 from qa import qa
 import json
 import os
@@ -14,14 +15,28 @@ class item:
         create()
 
     def analyse_item(self):
-        analyse_all()
+        analyseee()
+        store_embeds()
 
-    def qna(self):
-        qa()
+    def re_analyse(self):
+        # only deletes summaries and again analyses extracted data
+        from chat_handler import re_analyse
+        re_analyse()
 
-    def check_json(self, p):
+        
+
+    def chat(self):
+        from chat import chatbot
+        chatbot()
+
+
+    def check_json(self, p):  # to check json param
+        if not os.path.exists(self.json_path):
+            return None  # Return None if file does not exist
+
         with open(self.json_path, 'r') as f:
             data = json.load(f)
+
         key_map = {'c': 'created', 'a': 'analysed', 'q': 'qna'}
         key = key_map.get(p.lower())
         if key and key in data:
@@ -29,7 +44,8 @@ class item:
         else:
             return None
 
-    def set_json(self, p, v):
+
+    def set_json(self, p, v):  # to add json param
         with open(self.json_path, 'r') as f:
             data = json.load(f)
         key_map = {'c': 'created', 'a': 'analysed', 'q': 'qna'}
@@ -42,60 +58,50 @@ class item:
         else:
             return False
 
-    def make_json(self):
+    def make_json(self):  # to make the initial json file
         if not os.path.exists(self.json_path):
             default_data = {
                     "created": True,
-                    "analysed":True,
-                    "qna": False
+                    "analysed": False,
                 }
             with open(self.json_path, 'w') as f:
                 json.dump(default_data, f, indent=4)
             return True
         return False
     
-    def add_name(self,name):
+    def add_name(self,name): # adding name to the json file
         json_path = os.path.join(os.getcwd(), 'status.json')
 
-        # Load existing data preserving order
         with open(json_path, 'r') as f:
             data = json.load(f, object_pairs_hook=OrderedDict)
 
-        # Create new OrderedDict with 'type' first
         new_data = OrderedDict([('name', name)])
         new_data.update(data)
 
-        # Write updated data back to the file
         with open(json_path, 'w') as f:
             json.dump(new_data, f, indent=4)
     
-    def add_type(self,ty):
+    def add_type(self,ty):  # to add item or group
         json_path = os.path.join(os.getcwd(), 'status.json')
 
-        # Load existing data preserving order
         with open(json_path, 'r') as f:
             data = json.load(f, object_pairs_hook=OrderedDict)
 
-        # Create new OrderedDict with 'type' first
         new_data = OrderedDict([('type', ty)])
         new_data.update(data)
 
-        # Write updated data back to the file
         with open(json_path, 'w') as f:
             json.dump(new_data, f, indent=4)
 
-    def add_json_param(self,param,val):
+    def add_json_param(self,param,val): # add json param
         json_path = os.path.join(os.getcwd(), 'status.json')
 
-        # Load existing data preserving order
         with open(json_path, 'r') as f:
             data = json.load(f, object_pairs_hook=OrderedDict)
 
-        # Create new OrderedDict with 'type' first
         new_data = OrderedDict([(param, val)])
         new_data.update(data)
 
-        # Write updated data back to the file
         with open(json_path, 'w') as f:
             json.dump(new_data, f, indent=4)
     
@@ -144,6 +150,39 @@ class item:
                     os.remove(dest_file)
                 shutil.copy2(src_file, dest_file)
 
+    def initialize(self):
+        folders = ['summaries', 'extracted_data', 'raw_data']
+        file = 'status.json'
+
+        for folder in folders:
+            if os.path.exists(folder) and os.path.isdir(folder):
+                shutil.rmtree(folder)
+                print(f"Deleted folder: {folder}")
+            else:
+                print(f"Folder not found: {folder}")
+
+        if os.path.exists(file) and os.path.isfile(file):
+            os.remove(file)
+            print(f"Deleted file: {file}")
+        else:
+            print(f"File not found: {file}")
+
+    def first_cry(self):  #call this method when creating the item for the first time
+        print("This item has no data. Start by adding data \n")
+        self.make_json()  # making the initial json file
+        self.add_type("item") # adding name to the item
+        name = input("enter name : \n") 
+        self.add_name(name)
+        self.create_item()  # adding data
+        self.set_json('c',True)  # making the item created
+        print("analysing Items ... ")
+        self.analyse_item()
+        self.set_json('a',True)
+        t = input("Do you want to ask questions ? (y/n) \n")
+        if(t == 'y'):
+            self.chat()
+
+
     def new_group(self,name):
         print("new_group")
         self.make_json()
@@ -162,24 +201,26 @@ class item:
         self.set_json('a',True)
         t = input("Do you want to ask questions ? (y/n) \n")
         if(t == 'y'):
-            self.qna()
+            self.chat()
 
     def usage(self):
-        print("usage")
-        self.make_json()
-        self.add_type("item")
-        name = input("enter name : \n")
-        self.add_name(name)
-        self.create_item()
-        self.set_json('c',True)
-        print("analysing Items ... ")
-        self.analyse_item()
-        self.set_json('a',True)
-        t = input("Do you want to ask questions ? (y/n) \n")
-        if(t == 'y'):
-            self.qna()
+        print("usage")  # in the method
+        created = self.check_json('c')
+        if created == True:
+            print("The item has been created aldready, what do you want to do ? \n")
+            option = input(" \n1. Add data \n2. Analyse again\n3. QNA\n")
+            if option == '1':
+                self.create_item()
+            elif option == '2':
+                self.re_analyse()
+            elif option == '3':
+                self.chat()
+        else:
+            self.first_cry()  
+            
 
 
 
 it = item()
+# it.initialize()
 it.usage()
