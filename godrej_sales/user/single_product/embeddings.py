@@ -1,9 +1,16 @@
 import os
 import csv
-from analyser.ollama_clients import choose_model, create_vectorstore
+from analyser.ollama_clients import choose_model, create_vectorstore, OllamaEmbeddings
 import pickle
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_ollama import OllamaEmbeddings
+from langchain_community.vectorstores import FAISS
+from analyser.ollama_clients import choose_model
 
-def load_and_embed_summaries(summaries_folder='summaries'):
+
+FAISS_INDEX_FOLDER = 'faiss_index'
+
+def combine_texts(summaries_folder='summaries'):
     combined_text = ""
 
     # Load .txt files and concatenate their text
@@ -26,23 +33,33 @@ def load_and_embed_summaries(summaries_folder='summaries'):
 
     print(f"[INFO] Loaded text length from summaries: {len(combined_text)} characters")
 
-    # Choose embedding model from Ollama
-    embed_model = choose_model("embedding")
-    print(f"[INFO] Using embedding model: {embed_model}")
-
-    # Generate embedding vectors for the combined text
-    embedding_vectors = create_vectorstore(combined_text, model_name=embed_model)
-
-    print("[INFO] Created embedding vectors.")
-
-    return embedding_vectors
+    return combined_text
 
 
-def save_embeddings_locally(embedding_vectors, file_path='summaries/embeddings.pkl'):
-    os.makedirs(os.path.dirname(file_path), exist_ok=True)
-    with open(file_path, 'wb') as f:
-        pickle.dump(embedding_vectors, f)
-    print(f"[INFO] Embeddings saved locally at {file_path}")
+def save_text_embeddings(text: str, model_name: str = None):
+    if model_name is None:
+        model_name = choose_model('embedding')
+
+    # Split text into chunks
+    splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
+    chunks = splitter.split_text(text)
+
+    # Save chunks
+    os.makedirs('summaries', exist_ok=True)
+    with open(os.path.join('summaries', 'chunks.pkl'), 'wb') as f:
+        pickle.dump(chunks, f)
+
+    embeddings = create_vectorstore(text, model_name)
+
+    with open(os.path.join('summaries', 'embeddings.pkl'), 'wb') as f:
+        pickle.dump(embeddings, f)
+
+    print("Saved embeddings and chunks to 'summaries/'")
+
+
+
+
+
 
 def load_embeddings_locally(file_path='summaries/embeddings.pkl'):
     if not os.path.exists(file_path):
@@ -55,8 +72,7 @@ def load_embeddings_locally(file_path='summaries/embeddings.pkl'):
 
 
 def store_embeds():
-    embeddings = load_and_embed_summaries()
-    save_embeddings_locally(embeddings)
+    save_text_embeddings(combine_texts(),None)
 
 store_embeds()
 
