@@ -175,6 +175,10 @@ class item:
         self.add_name(name)
         self.create_item()  # adding data
         self.set_json('c',True)  # making the item created
+        c = input("Do you want to verify (y/n)??")
+        if c == 'y':
+            from verify import verify_main
+            verify_main()
         print("analysing Items ... ")
         self.analyse_item()
         self.set_json('a',True)
@@ -208,9 +212,13 @@ class item:
         created = self.check_json('c')
         if created == True:
             print("The item has been created aldready, what do you want to do ? \n")
-            option = input(" \n1. Add data \n2. Analyse again\n3. QNA\n")
+            option = input(" \n1. Add data or Verify \n2. Analyse again\n3. QNA\n")
             if option == '1':
                 self.create_item()
+                c = input("Do you want to verify (y/n)??")
+                if c == 'y':
+                    from verify import verify_main
+                    verify_main()
             elif option == '2':
                 self.re_analyse()
             elif option == '3':
