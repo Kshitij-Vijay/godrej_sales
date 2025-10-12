@@ -1,3 +1,29 @@
+import os
+
+def handle_text():
+    texts_folder = os.path.join('extracted_data', 'texts')
+    if not os.path.exists(texts_folder):
+        os.makedirs(texts_folder)
+        print(f"Created folder: {texts_folder}")
+
+    # List all .txt files that are numbered
+    files = [f for f in os.listdir(texts_folder) if f.endswith('.txt') and f[:-4].isdigit()]
+    numbers = sorted([int(f[:-4]) for f in files])
+
+    if numbers:
+        new_number = numbers[-1] + 1
+    else:
+        new_number = 1
+
+    new_file_path = os.path.join(texts_folder, f"{new_number}.txt")
+    user_input = input(f"Enter content for {new_number}.txt:\n")
+
+    with open(new_file_path, 'w') as f:
+        f.write(user_input)
+
+    print(f"Content saved to {new_file_path}")
+
+
 def handle_chat():
     from chat import llm_chain
     chain = llm_chain()
@@ -5,8 +31,6 @@ def handle_chat():
     store_conversation(conversation)
     from create import re_analyse
     re_analyse()
-
-
 
 def converse(chain):
     conversation = ""

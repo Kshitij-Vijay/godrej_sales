@@ -20,7 +20,7 @@ class item:
 
     def re_analyse(self):
         # only deletes summaries and again analyses extracted data
-        from chat_handler import re_analyse
+        from create import re_analyse
         re_analyse()
 
         

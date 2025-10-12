@@ -1,12 +1,8 @@
 1.txt:
-Here is a summarized version of the text:
+Pop 27 Locker, approximately 90kg, features a multi-keying, six-lever locking system and includes one removable shelf. Its size is around 680H x 530W x 420D.
 
-Banks and financial institutions deal with daily transactions of cash that require high security measures to protect against theft. Despite having methods such as drawers, cupboards, or tables for storing cash, they are vulnerable due to their relatively low-grade resistance.
+2.txt:
+The summary of the given text is as follows: The total thickness of the door is 70mm, while its capacity for storing liquids is a maximum of 14 liters.
 
-To address this need in areas where risk is lower, the Godrej POP Safes can be installed with ease of access features like multi-bend bodies made of fully welded steel, which provide excellent security against attempts to break open the safe at any point and are also resistant to hammer blows. 
-
-Additionally, the POP Safe has an 8-shooter bot behind a rebate and a continuous vertical rear edge door lock. It has an 827 mm overall depth, and storage is provided for items needing additional security measures with a con slot measuring 12480 mm and a base inside dimension of 136mm x 510mm.
-
-The Godrej POP Safes offer high-precision dual-controlling locks, providing outstanding security features including corrosion resistance and excellent lock strength up to 7000N per bolt pair. They are available in various colors like grey, black, and white powder coated, removable magnetic finish (mobi) and enable weight options for easy installation.
-
-Overall, the Godrej POP Safes provide high-end security solutions specifically designed for low-risk areas with ease of access features to protect cash transactions efficiently.
+3.txt:
+The product is available in two colors: grey and black. It features a sleek, minimalist design with a keylock system for security.

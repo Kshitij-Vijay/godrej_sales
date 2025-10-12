@@ -9,6 +9,10 @@ def analyse_images(questions):
     os.makedirs(summaries_folder, exist_ok=True)
     output_csv = os.path.join(summaries_folder, 'images.csv')
 
+    if not os.path.exists(images_dir):
+        print(f"Image folder '{images_dir}' does not exist. No images to process.")
+        return
+
     results = []
 
     # Iterate through each image file in the images directory
@@ -28,7 +32,8 @@ def analyse_images(questions):
 
     print(f"Analysis complete. CSV saved to {output_csv}")
 
+
 # Example usage:
 if __name__ == "__main__":
-    questions = ["What is in the image?", "Describe the colors."]
+    questions = ["What is in the image?"]
     analyse_images(questions)

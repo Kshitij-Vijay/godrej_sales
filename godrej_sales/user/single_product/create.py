@@ -1,5 +1,5 @@
 def ask_for_input_type():
-    options = ["pdf", "webpage", "images", "chat"]
+    options = ["pdf", "webpage", "images", "chat", "text"]
     print("Select data input type:")
     for i, opt in enumerate(options, 1):
         print(f"{i}. {opt}")
@@ -38,6 +38,9 @@ def raw_data():
     if input_type == "chat":
         from chat_handler import handle_chat
         handle_chat()
+    if input_type == "text":
+        from chat_handler import handle_text
+        handle_text()
     else:
         print("Other input types (webpage, images) not yet implemented.")
 
